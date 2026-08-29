@@ -1,5 +1,5 @@
 ---
-framework_version: 1.0.1
+framework_version: 1.0.2
 ---
 
 # Agent Guidelines
@@ -41,15 +41,23 @@ into runtime-specific files.
 
 ## Standing rules
 
-- **Show question progress every time the user is asked a question.** Before
-  asking, determine the full sequence of currently applicable questions and ask
-  them one at a time. Prefix each question with
+- **Show question progress during a structured interview.** When a workflow
+  asks a planned *sequence* of questions - `/setup`, `/expand`, and the
+  gap-filling follow-ups that come after them - work out the full sequence of
+  currently applicable questions, ask them one at a time, and prefix each with
   `Question <current> of <total> (<remaining> remaining)`, where `remaining` is
-  the number left after the current question. Exclude questions already
-  answered or made irrelevant; if an answer adds or removes follow-ups,
-  recalculate the total before asking the next question. A standalone question
-  is `Question 1 of 1 (0 remaining)`. This applies to every workflow, branch,
-  confirmation and follow-up, not only `/setup`.
+  the number left after the current one. Exclude questions already answered or
+  made irrelevant; if an answer adds or removes follow-ups, recalculate the
+  total before asking the next question.
+
+  Two limits, so the counter stays useful rather than becoming noise. **A
+  one-off question gets no prefix** - a single confirmation such as "Should I
+  proceed with drafting?" is not an interview, and announcing
+  "Question 1 of 1" in front of a decision that matters is theatre. **Never
+  invent a total you cannot know** - where a workflow's later questions depend
+  on what earlier answers turn up, say which question this is and that more may
+  follow, rather than publishing a number that will visibly change. Guessing a
+  total is the same failure as guessing a fact.
 - **Never write personal data to a tracked file.** Profile answers go to
   `profile/`, search settings to `jobsearch.config.json`.
 - **Never fabricate a fact about the user.** The profile is the grounding
