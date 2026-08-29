@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests (Python ${{ matrix.python-version }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # The README promises Windows and macOS support to non-technical users,
+        # so both are tested rather than assumed. Path handling and the default
+        # state directory differ per platform and have broken before.
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install
+        run: pip install -e .
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -t .
+
+      - name: Server starts and reports its configuration
+        # --check exits non-zero only on a configuration error, so this catches
+        # an install that imports but cannot actually run.
+        run: jobsearch-mcp --check
+
+  guards:
+    name: Security guards and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # security_guards.py is standard library only; lint_skills.py parses the
+      # YAML frontmatter in the skill files and needs PyYAML.
+      - name: Install lint dependencies
+        run: pip install pyyaml
+
+      - name: Personal-data and permissions guards
+        run: python3 tools/security_guards.py
+
+      - name: Workflow file lint
+        run: python3 tools/lint_skills.py
+
+      - name: No personal data in tracked files
+        # Belt and braces on top of the gitignore rules: fail if a populated
+        # profile or a real config was ever committed.
+        run: |
+          leaked=$(git ls-files | grep -E '^(profile/.+|jobsearch\.config\.json|job_search_tracker\.csv)$' | grep -v '^profile/\.gitkeep$' || true)
+          if [ -n "$leaked" ]; then
+            echo "::error::personal data is tracked; it must stay gitignored"
+            echo "$leaked"
+            exit 1
+          fi
+          echo "no personal data tracked"

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jobsearch-mcp"
+version = "1.0.0"
+description = "An MCP server that searches job portals, triages postings and tracks applications"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Mads Lorentzen" },
+    { name = "Trey Morgan" },
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "fastmcp>=2.10",
+]
+
+[project.optional-dependencies]
+# Only needed if you host the server and want Microsoft Entra ID sign-in
+# instead of a shared token. Most people never install these.
+oauth = [
+    "authlib>=1.3.0",
+    "cryptography>=42.0.0",
+    "py-key-value-aio[filetree]>=0.2.0",
+]
+
+[project.scripts]
+jobsearch-mcp = "jobsearch_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["mcp_server"]
+include = ["jobsearch_mcp*"]

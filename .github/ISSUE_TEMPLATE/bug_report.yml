@@ -1,0 +1,66 @@
+name: Bug report
+description: Something does not work as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting.
+
+        **Before you post, remove personal details.** The output below includes
+        file paths and your search settings. It should not contain your name,
+        contact details, salary floor, or the job titles you are searching for.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Ran ...
+        2. Asked the assistant to ...
+        3. Got ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: check-output
+    attributes:
+      label: Output of `jobsearch-mcp --check`
+      description: >
+        Run this in the project folder. Redact anything personal before pasting.
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: client
+    attributes:
+      label: Which AI app
+      placeholder: Claude Code, GitHub Copilot CLI, Claude Desktop, Cursor, other
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11, macOS 15, Ubuntu 24.04
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: >
+        Optional. Run with `LOG_LEVEL=DEBUG` for more detail. Redact before
+        pasting.
+      render: text

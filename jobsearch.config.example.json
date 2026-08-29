@@ -1,0 +1,40 @@
+{
+  "_comment": "Copy this file to jobsearch.config.json and edit it. Every field is optional - anything you leave out is simply not applied. See docs/CONFIGURATION.md.",
+
+  "search": {
+    "_comment": "The searches the server runs when you call search_jobs with no query.",
+    "queries": [
+      "software engineer",
+      "senior software engineer",
+      "engineering manager"
+    ],
+    "remote_location": "United States",
+    "remote_filter": "remote",
+    "remote_region": "us",
+
+    "_comment_local": "Optional second lane for roles you could commute to. Leave local_metro empty if you only want remote roles.",
+    "local_location": "",
+    "local_metro": [],
+
+    "default_days": 14,
+    "default_limit": 20
+  },
+
+  "filters": {
+    "_comment": "Optional noise control for broad queries. Leave the lists empty and nothing is filtered.",
+    "relevance_terms": [],
+    "exclude_terms": [],
+    "exclude_override_terms": [],
+
+    "_comment_ic": "Set to true only if you are specifically looking for roles with leadership scope.",
+    "flag_individual_contributor": false
+  },
+
+  "deal_breakers": {
+    "_comment": "Hard rules checked by check_deal_breakers. salary_floor of 0 disables the salary check.",
+    "salary_floor": 0,
+    "currency": "USD",
+    "currency_symbol": "$",
+    "require_remote": true
+  }
+}

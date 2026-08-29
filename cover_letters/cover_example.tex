@@ -1,0 +1,60 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cover Letter - Example Company, Project Coordinator
+%
+% Sample cover letter with fictional details. Replace this sample with the user's own details.
+% Example cover letter with sample content. This is the structural
+% reference for /apply (see 06-cover-letter-templates.md) and the CI smoke
+% test for cover.cls: it must always compile with xelatex to exactly 1 page.
+% It demonstrates the correct itemize pattern: the list sits OUTSIDE
+% \lettercontent{} (whose trailing \\ errors on \end{itemize}) and is
+% wrapped in Raleway-Medium so the bullet font matches the body.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[]{cover}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\rfoot{Page \thepage \hspace{0pt}}
+\thispagestyle{empty}
+\renewcommand{\headrulewidth}{0pt}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     TITLE NAME
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\namesection{}{\Huge{Alex Taylor}}{  \href{mailto:alex.taylor@example.com}{alex.taylor@example.com} | +1 555 0100 |  \urlstyle{same}\href{https://www.linkedin.com/in/example-profile/}{LinkedIn}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     MAIN COVER LETTER CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\currentdate{\today}
+\lettercontent{Dear Hiring Manager,}
+
+\lettercontent{I am excited to submit this sample application for the Project Coordinator role. My background includes practical experience organizing team routines, improving documentation and helping busy groups keep work moving from request to completion.}
+
+\lettercontent{In recent roles with fictional organizations, I have built simple systems that make everyday work easier to understand and easier to finish. Highlights include:}
+
+{\raggedright\fontspec[Path = OpenFonts/fonts/raleway/]{Raleway-Medium}\fontsize{11pt}{13pt}\selectfont
+\begin{itemize}
+    \item \textbf{Project routines:} Coordinated schedules, agendas, action items and status notes for cross-functional teams.
+    \item \textbf{Process documentation:} Created checklists and reference guides that made recurring tasks more consistent.
+    \item \textbf{Communication:} Prepared concise updates that helped managers understand priorities, blockers and next steps.
+\end{itemize}\par}
+\vspace{6pt}
+
+\lettercontent{I would bring a calm, organized and service-minded approach to the team. I enjoy clarifying expectations, following through on details and helping colleagues spend less time searching for information.}
+
+\lettercontent{I look forward to hearing from you.}
+
+\begin{flushright}
+% Note: no trailing \\ inside \closing{} - cover.cls appends its own \\, and a
+% doubled break triggers "There's no line here to end."
+\closing{Kind regards,}
+
+\signature{Alex Taylor}
+\end{flushright}
+\end{document}

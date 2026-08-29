@@ -1,0 +1,65 @@
+# Hosted deployment. Only needed if you want the server running on a machine
+# that stays on, reachable from more than one client.
+#
+# For desktop use see the Quick Start in the main README - no Docker required.
+#
+# Before running: copy .env.example to .env and fill it in, then create the
+# ./data, ./profile and ./config directories (deploy.sh does this for you).
+
+services:
+  jobsearch-mcp:
+    build:
+      context: ..
+      dockerfile: mcp_server/Dockerfile
+    image: jobsearch-mcp:latest
+    container_name: jobsearch-mcp
+    restart: unless-stopped
+    # Bound to localhost by default: nothing is reachable from the network
+    # until you put a reverse proxy or tunnel in front of it. That is the safe
+    # default for a service holding your CV and application history.
+    # To expose the port directly, change this to "8791:8791" AND set
+    # MCP_AUTH=token with a real MCP_TOKEN.
+    ports:
+      - "127.0.0.1:8791:8791"
+    volumes:
+      # State: database, audit log, profile snapshots.
+      - ./data:/data
+      # Your profile markdown. Writable, because once hosted the server is the
+      # source of truth for it and an edit made from a phone must not be lost.
+      - ./profile:/app/profile
+      # Your jobsearch.config.json lives here.
+      - ./config:/config
+    environment:
+      - MCP_TRANSPORT=http
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8791
+      # none | token | oauth. See mcp_server/README.md.
+      - MCP_AUTH=${MCP_AUTH:-token}
+      - MCP_TOKEN=${MCP_TOKEN:-}
+      # Read only when MCP_AUTH=oauth.
+      - MCP_BASE_URL=${MCP_BASE_URL:-}
+      - MCP_JWT_SIGNING_KEY=${MCP_JWT_SIGNING_KEY:-}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID:-}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET:-}
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID:-}
+      - MCP_ALLOWED_REDIRECT_URIS=${MCP_ALLOWED_REDIRECT_URIS:-}
+      # Required in oauth mode: who may actually use the server, not just log in.
+      - MCP_ALLOWED_EMAILS=${MCP_ALLOWED_EMAILS:-}
+    env_file:
+      - path: .env
+        required: false
+    # Cap the json-file log so it cannot fill the disk. The durable audit trail
+    # is the rotating file on /data, not this.
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+    healthcheck:
+      # 401 counts as healthy: with auth enabled, an unauthenticated probe being
+      # rejected proves both that the server is up and that auth is enforced.
+      test: ["CMD", "python", "-c", "import urllib.request,urllib.error;\ntry:\n urllib.request.urlopen('http://127.0.0.1:8791/mcp',timeout=5)\nexcept urllib.error.HTTPError as e:\n raise SystemExit(0 if e.code in (401,405,406) else 1)\nexcept Exception:\n raise SystemExit(1)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s

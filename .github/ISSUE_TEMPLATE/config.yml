@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or setup help
+    url: https://github.com/treymorgan/jobsearch-apply-mcp/discussions
+    about: >
+      Ask here if something will not install or connect. Check
+      docs/TROUBLESHOOTING.md first, and run `jobsearch-mcp --check`.
+  - name: Security vulnerability
+    url: https://github.com/treymorgan/jobsearch-apply-mcp/security/advisories/new
+    about: >
+      Report privately. Do not open a public issue for anything that could put
+      someone's personal data at risk.

@@ -1,0 +1,22 @@
+# Optional: expose the server over a Cloudflare Tunnel instead of opening a
+# port. Useful when the host has no public IP or you would rather not run a
+# reverse proxy.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d
+#
+# Create the tunnel in the Cloudflare dashboard, point it at
+# http://localhost:8791, and put the token in .env as CF_TUNNEL_TOKEN.
+#
+# A tunnel is transport, not authentication: it publishes the server to the
+# internet. Keep MCP_AUTH=token (or oauth) set when using this.
+services:
+  cloudflared-jobs:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-jobs
+    restart: unless-stopped
+    network_mode: host
+    # http2 forced: QUIC/UDP egress is blocked on many networks.
+    command: tunnel --no-autoupdate --protocol http2 run --token ${CF_TUNNEL_TOKEN}
+    env_file:
+      - path: .env
+        required: false
