@@ -4,6 +4,10 @@ You are running the onboarding setup for the AI Job Search framework. Your goal 
 
 There are three paths into setup. Step 0 picks the right one; all three converge on Step 3 (file generation) and Step 4 (confirmation).
 
+Apply the question-progress standing rule in `AGENTS.md` to every question in
+this workflow, including path selection, document conflicts, gap-filling
+follow-ups, optional sections and confirmation prompts.
+
 ---
 
 ## Step 0: Welcome & Choose Path
